@@ -1,0 +1,73 @@
+datasource db {
+  provider = "postgresql" // หรือฐานข้อมูลที่คุณใช้ เช่น mysql, sqlite
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                          Int       @id @default(autoincrement())
+  username                    String    @unique
+  email                       String    @unique
+  password                    String?
+  provider                    String    @default("local")
+  name                        String    @default("")
+  tel                         String    @default("")
+  googleId                    String?
+  Token                       String    @default("")
+  resetPasswordToken          String?   @default("")
+  confirmationToken           String    @default("")
+  resetPasswordTokenExpiresAt DateTime?
+  confirmed                   Boolean   @default(false)
+  blocked                     Boolean   @default(false)
+  createdAt                   DateTime  @default(now())
+  updatedAt                   DateTime  @updatedAt
+  firstTime                   Boolean   @default(false)
+
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
+
+  tasks Task[]
+
+  @@map("users")
+}
+
+model Role {
+  id       Int        @id @default(autoincrement())
+  nameRole Permission @default(USER)
+  blocked  Boolean    @default(false)
+
+  users User[] // One role has many users
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  priority    Priority @default(MEDIUM)
+  status      Status   @default(PENDING)
+  dueDate     DateTime
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Priority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum Permission {
+  ADMIN
+  USER
+}
+
+enum Status {
+  PENDING
+  IN_PROGRESS
+  DONE
+}
