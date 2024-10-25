@@ -34,10 +34,9 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get('test')
-  test(){
-    return this.tasksService.findOne(4, 1)
+  test() {
+    return this.tasksService.findOne(4, 1);
   }
-
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -51,7 +50,6 @@ export class TasksController {
   @ApiBearerAuth('access-token') // Specify that this route requires Bearer Token authentication
   @ApiTags('Tasks')
   create(@Req() req: Request, @Body() createTaskDto: CreateTaskDto) {
-  
     const userId = Number(req['user']?.['userId']);
 
     return this.tasksService.create(createTaskDto, userId);
@@ -145,7 +143,7 @@ export class TasksController {
     if (userRole.toLocaleLowerCase() !== 'admin') {
       throw new UnauthorizedException(
         'You are not authorized to access this resource',
-      )
+      );
     }
     return this.tasksService.updateByAdmin(id, updateTaskDto);
   }
@@ -166,7 +164,6 @@ export class TasksController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateTaskDto: UpdateTaskDto,
   ) {
-    
     const userId = Number(req['user']?.['userId']);
     return this.tasksService.update(id, updateTaskDto, userId);
   }
@@ -199,8 +196,6 @@ export class TasksController {
   @ApiBearerAuth('access-token') // Specify that this route requires Bearer Token authentication
   @ApiTags('Tasks')
   removeByAdmin(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-    
     return this.tasksService.removeByAdmin(id);
   }
- 
 }
