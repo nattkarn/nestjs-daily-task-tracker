@@ -24,21 +24,21 @@ async function bootstrap() {
 
   // Uncomment this if you want to enable Swagger
   //
-  // const config = new DocumentBuilder()
-  //   .setTitle('Billing Data API')
-  //   .setDescription('API to retrieve user billing data based on ID card')
-  //   .setVersion('1.0')
-  //   .addBearerAuth(    // Add Bearer token authentication
-  //     {
-  //       type: 'http',
-  //       scheme: 'bearer',
-  //     },
-  //     'access-token' // Name of the security scheme
-  //   )
-  //   .build();
+  const config = new DocumentBuilder()
+    .setTitle('Task Daily Data API')
+    .setDescription('API to retrieve user billing data based on ID card')
+    .setVersion('1.0')
+    .addBearerAuth(    // Add Bearer token authentication
+      {
+        type: 'http',
+        scheme: 'bearer',
+      },
+      'access-token' // Name of the security scheme
+    )
+    .build();
 
-  // const document = SwaggerModule.createDocument(app, config);
-  // SwaggerModule.setup('api/docs', app, document);
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
 
 
   await app.listen(process.env.PORT ?? 5000);
